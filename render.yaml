@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: ukt-zed-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: SEARCH_MODE
+        value: hybrid
+      - key: HYBRID_KEYWORD_WEIGHT
+        value: "0.6"
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: EMBEDDING_DIMENSIONS
+        value: "1536"
+      - key: EMBEDDING_MIN_LEVEL
+        value: "4"
+      - key: CONFIDENCE_AUTO_THRESHOLD
+        value: "0.75"
+      - key: CONFIDENCE_REVIEW_THRESHOLD
+        value: "0.45"
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+      - key: THROTTLE_TTL_MS
+        value: "60000"
+      - key: THROTTLE_LIMIT
+        value: "30"
+      # Set these in Render Dashboard (Secrets)
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

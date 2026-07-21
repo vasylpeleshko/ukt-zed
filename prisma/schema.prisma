@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UktzedPosition {
+  id            String                      @id @default(uuid())
+  code          String                      @unique
+  codeRaw       String                      @map("code_raw")
+  name          String
+  groupCode     String                      @map("group_code")
+  parentCode    String?                     @map("parent_code")
+  level         Int
+  searchContext String?                     @map("search_context")
+  embedding     Unsupported("vector(1536)")?
+  searchVector  Unsupported("tsvector")?    @map("search_vector")
+  source        String                      @default("tariff")
+  createdAt     DateTime                    @default(now()) @map("created_at")
+
+  @@index([groupCode])
+  @@index([level])
+  @@map("uktzed_positions")
+}
+
+model ClassificationAudit {
+  id             String   @id @default(uuid())
+  productQuery   String   @map("product_query")
+  resultCode     String?  @map("result_code")
+  confidence     Float?
+  requiresReview Boolean  @default(false) @map("requires_review")
+  candidates     Json?
+  reason         String?
+  latencyMs      Int?     @map("latency_ms")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("classification_audit")
+}
